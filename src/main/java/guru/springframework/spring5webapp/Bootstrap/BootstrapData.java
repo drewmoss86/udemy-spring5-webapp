@@ -29,19 +29,14 @@ public class BootstrapData implements CommandLineRunner {
 
         Author eric = new Author("Eric", "Evans");
         Book ddd = new Book("Domain Driven Design", "123123");
-//        Publisher oNeil = new Publisher("ONeil", "123 Evergreen Terrace", "Springfield", "MA", "02128");
-        Publisher oNeil = new Publisher();
-        oNeil.setAddressLine1("123 Evergreen Terrace");
-        oNeil.setCity("Springfield");
-        oNeil.setState("MA");
-        oNeil.setZip("02128");
+        Publisher oNeil = new Publisher("ONeil", "123 Evergreen Terrace", "Springfield", "MA", "02128");
 
-        publisherRepository.save(oNeil);
+        publisherRepository.save(oNeil); // If this is missing, setPublisher will not work.
 
         eric.getBooks().add(ddd);
         ddd.getAuthors().add(eric);
 
-        ddd.setPublisher(oNeil);
+        ddd.setPublisher(oNeil); // In order to set, Publisher must be saved first or will throw error.
         oNeil.getBooks().add(ddd);
 
         authorRepository.save(eric);
