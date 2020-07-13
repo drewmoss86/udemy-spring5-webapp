@@ -1,11 +1,20 @@
 package guru.springframework.spring5webapp.Model;
 
+import javax.persistence.*;
 import java.util.Set;
+@Entity
 
 public class Book {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO) //TODO: Research this
+
+    private Long id;
     private String title;
     private String isbn;
+
+    @ManyToMany
+    @JoinTable(name = "author_book", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors;
 
     //    Default constructor
@@ -15,6 +24,14 @@ public class Book {
         this.title = title;
         this.isbn = isbn;
         this.authors = authors;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -39,5 +56,35 @@ public class Book {
 
     public void setAuthors(Set<Author> authors) {
         this.authors = authors;
+    }
+
+    // Override default methods
+
+    // For debugging...sets output to JSON-like
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", isbn='" + isbn + '\'' +
+                ", authors=" + authors +
+                '}';
+    }
+
+    // Check if two objects have same ID only
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Book book = (Book) o;
+
+        return id != null ? id.equals(book.id) : book.id == null;
+    }
+
+    // Return hashcode of ID, assuming it's not null
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }
