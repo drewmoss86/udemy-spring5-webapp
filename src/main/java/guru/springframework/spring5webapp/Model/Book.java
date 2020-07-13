@@ -1,29 +1,35 @@
 package guru.springframework.spring5webapp.Model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
-@Entity
 
+@Entity
 public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) //TODO: Research this
-
     private Long id;
+
     private String title;
     private String isbn;
 
+    @ManyToOne
+    private Publisher publisher;
+
     @ManyToMany
     @JoinTable(name = "author_book", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "author_id"))
-    private Set<Author> authors;
+    private Set<Author> authors = new HashSet<>();
+
+
 
     //    Default constructor
     public Book(){}
 
-    public Book(String title, String isbn, Set<Author> authors) {
+    public Book(String title, String isbn/**, Set<Author> authors**/) {
         this.title = title;
         this.isbn = isbn;
-        this.authors = authors;
+//        this.authors = authors;
     }
 
     public Long getId() {
@@ -56,6 +62,14 @@ public class Book {
 
     public void setAuthors(Set<Author> authors) {
         this.authors = authors;
+    }
+
+    public Publisher getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
     }
 
     // Override default methods
